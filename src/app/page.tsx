@@ -17,18 +17,6 @@ export default function LandingPage() {
 
   return (
     <main className={styles.main}>
-      {/* Navigation */}
-      <nav className={`${styles.nav} ${scrolled ? styles.navScrolled : ''}`}>
-        <div className={styles.logo}>
-          <span className={styles.logoText}>Home</span>
-          <span className={styles.logoAccent}>Plate</span>
-        </div>
-        <div className={styles.navLinks}>
-          <Link href="/login" className={styles.loginBtn}>Connexion / Login</Link>
-          <Link href="/register" className={styles.signupBtn}>Inscription / Sign Up</Link>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.heroBackground}>
@@ -48,13 +36,19 @@ export default function LandingPage() {
             / Discover the best home cooks near you.
           </p>
           
-          <div className={styles.searchContainer}>
+          <form 
+            className={styles.searchContainer}
+            onSubmit={(e) => {
+              e.preventDefault();
+              window.location.href = '/explore';
+            }}
+          >
             <div className={styles.searchBar}>
               <span className={styles.searchIcon}>📍</span>
-              <input type="text" placeholder="Entrez votre adresse / Enter your address" className={styles.searchInput} />
-              <button className={styles.searchBtn}>Trouver / Find</button>
+              <input type="text" placeholder="Entrez votre adresse / Enter your address" className={styles.searchInput} required />
+              <button type="submit" className={styles.searchBtn}>Trouver / Find</button>
             </div>
-          </div>
+          </form>
         </div>
         
         <div className={styles.floatingDecorations}>
@@ -80,7 +74,14 @@ export default function LandingPage() {
             { name: "Américain", emoji: "🇺🇸" },
             { name: "Desserts", emoji: "🍰" }
           ].map((cat, i) => (
-            <div key={i} className={styles.categoryCard}>
+            <div 
+              key={i} 
+              className={styles.categoryCard}
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                window.location.href = `/explore?category=${cat.name}`;
+              }}
+            >
               <span className={styles.categoryEmoji}>{cat.emoji}</span>
               <span className={styles.categoryName}>{cat.name}</span>
             </div>

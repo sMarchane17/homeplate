@@ -16,6 +16,14 @@ export default function DishForm({ lang }: DishFormProps) {
   const [selectedAllergens, setSelectedAllergens] = useState<string[]>([]);
   const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
 
+  // Controlled inputs
+  const [nameEn, setNameEn] = useState('');
+  const [nameFr, setNameFr] = useState('');
+  const [descEn, setDescEn] = useState('');
+  const [descFr, setDescFr] = useState('');
+  const [price, setPrice] = useState('');
+  const [category, setCategory] = useState('Mains');
+
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -50,45 +58,118 @@ export default function DishForm({ lang }: DishFormProps) {
     }
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!nameEn || !nameFr || !price) {
+      alert(lang === 'en' ? 'Please fill in required fields' : 'Veuillez remplir les champs obligatoires');
+      return;
+    }
+
+    const newDish = {
+      id: Date.now(),
+      name: { en: nameEn, fr: nameFr },
+      desc: { en: descEn, fr: descFr },
+      price: parseFloat(price),
+      category: category,
+      active: true,
+      img: imagePreview || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=60&w=500',
+      allergens: selectedAllergens,
+      dietary: selectedDietary
+    };
+
+    // Load existing, append and save
+    const savedStr = localStorage.getItem('cook_dishes');
+    let currentDishes = [];
+    if (savedStr) {
+      try {
+        currentDishes = JSON.parse(savedStr);
+      } catch (err) {
+        currentDishes = [];
+      }
+    }
+    const updated = [newDish, ...currentDishes];
+    localStorage.setItem('cook_dishes', JSON.stringify(updated));
+
+    alert(lang === 'en' ? 'Dish added successfully!' : 'Plat ajouté avec succès !');
+    window.location.href = '/cook/menu';
+  };
+
   return (
     <div className={styles.formContainer}>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>{lang === 'en' ? 'Basic Details' : 'Détails de base'}</h2>
           
           <div className={styles.formGroup}>
-            <label className={styles.label}>{lang === 'en' ? 'Dish Name (EN)' : 'Nom du plat (EN)'}</label>
-            <input type="text" className={styles.input} placeholder="e.g. Beef Bourguignon" />
+            <label className={styles.label}>{lang === 'en' ? 'Dish Name (EN) *' : 'Nom du plat (EN) *'}</label>
+            <input 
+              type="text" 
+              className={styles.input} 
+              placeholder="e.g. Beef Bourguignon" 
+              value={nameEn}
+              onChange={e => setNameEn(e.target.value)}
+              required
+            />
           </div>
           
           <div className={styles.formGroup}>
-            <label className={styles.label}>{lang === 'en' ? 'Dish Name (FR)' : 'Nom du plat (FR)'}</label>
-            <input type="text" className={styles.input} placeholder="ex. Bœuf Bourguignon" />
+            <label className={styles.label}>{lang === 'en' ? 'Dish Name (FR) *' : 'Nom du plat (FR) *'}</label>
+            <input 
+              type="text" 
+              className={styles.input} 
+              placeholder="ex. Bœuf Bourguignon" 
+              value={nameFr}
+              onChange={e => setNameFr(e.target.value)}
+              required
+            />
           </div>
 
           <div className={styles.formGroup}>
             <label className={styles.label}>{lang === 'en' ? 'Description (EN)' : 'Description (EN)'}</label>
-            <textarea className={styles.textarea} rows={3} placeholder="Describe the dish..."></textarea>
+            <textarea 
+              className={styles.textarea} 
+              rows={3} 
+              placeholder="Describe the dish..."
+              value={descEn}
+              onChange={e => setDescEn(e.target.value)}
+            ></textarea>
           </div>
 
           <div className={styles.formGroup}>
             <label className={styles.label}>{lang === 'en' ? 'Description (FR)' : 'Description (FR)'}</label>
-            <textarea className={styles.textarea} rows={3} placeholder="Décrivez le plat..."></textarea>
+            <textarea 
+              className={styles.textarea} 
+              rows={3} 
+              placeholder="Décrivez le plat..."
+              value={descFr}
+              onChange={e => setDescFr(e.target.value)}
+            ></textarea>
           </div>
 
           <div className={styles.row}>
             <div className={styles.formGroup}>
-              <label className={styles.label}>{lang === 'en' ? 'Price (€)' : 'Prix (€)'}</label>
+              <label className={styles.label}>{lang === 'en' ? 'Price (€) *' : 'Prix (€) *'}</label>
               <div className={styles.priceInputWrapper}>
                 <span className={styles.currencySymbol}>€</span>
-                <input type="number" step="0.01" className={`${styles.input} ${styles.priceInput}`} placeholder="0.00" />
+                <input 
+                  type="number" 
+                  step="0.01" 
+                  className={`${styles.input} ${styles.priceInput}`} 
+                  placeholder="0.00" 
+                  value={price}
+                  onChange={e => setPrice(e.target.value)}
+                  required
+                />
               </div>
             </div>
             
             <div className={styles.formGroup}>
               <label className={styles.label}>{lang === 'en' ? 'Category' : 'Catégorie'}</label>
-              <select className={styles.select}>
-                <option value="">{lang === 'en' ? 'Select a category' : 'Sélectionnez une catégorie'}</option>
+              <select 
+                className={styles.select}
+                value={category}
+                onChange={e => setCategory(e.target.value)}
+              >
                 {categories.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
                 ))}
@@ -168,7 +249,7 @@ export default function DishForm({ lang }: DishFormProps) {
         </div>
 
         <div className={styles.formActions}>
-          <button type="button" className={styles.cancelBtn}>
+          <button type="button" className={styles.cancelBtn} onClick={() => window.location.href = '/cook/menu'}>
             {lang === 'en' ? 'Cancel' : 'Annuler'}
           </button>
           <button type="submit" className={styles.submitBtn}>
@@ -190,10 +271,12 @@ export default function DishForm({ lang }: DishFormProps) {
             )}
           </div>
           <div className={styles.previewContent}>
-            <h3 className={styles.previewName}>{lang === 'en' ? 'Dish Name' : 'Nom du plat'}</h3>
-            <span className={styles.previewPrice}>€0.00</span>
+            <h3 className={styles.previewName}>
+              {lang === 'en' ? (nameEn || 'Dish Name') : (nameFr || 'Nom du plat')}
+            </h3>
+            <span className={styles.previewPrice}>€{price ? parseFloat(price).toFixed(2) : '0.00'}</span>
             <p className={styles.previewDesc}>
-              {lang === 'en' ? 'Dish description will appear here...' : 'La description du plat apparaîtra ici...'}
+              {lang === 'en' ? (descEn || 'Dish description will appear here...') : (descFr || 'La description du plat apparaîtra ici...')}
             </p>
             <div className={styles.previewBadges}>
               {selectedDietary.map(d => <span key={d} className={styles.previewBadge}>{d}</span>)}

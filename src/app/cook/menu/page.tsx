@@ -7,10 +7,11 @@ import styles from './menu.module.css';
 export default function MenuPage() {
   const [lang, setLang] = useState<'en' | 'fr'>('en');
   const [activeTab, setActiveTab] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const categories = ['All', 'Mains', 'Starters', 'Desserts'];
 
-  const dishes = [
+  const DEFAULT_DISHES = [
     { id: 1, name: { en: 'Beef Bourguignon', fr: 'Bœuf Bourguignon' }, desc: { en: 'Classic French beef stew braised in red wine', fr: 'Ragoût de bœuf classique braisé au vin rouge' }, price: 18.50, category: 'Mains', active: true, img: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
     { id: 2, name: { en: 'Coq au Vin', fr: 'Coq au Vin' }, desc: { en: 'Chicken braised with wine, lardons, mushrooms', fr: 'Poulet braisé au vin, lardons, champignons' }, price: 16.00, category: 'Mains', active: true, img: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
     { id: 3, name: { en: 'Ratatouille', fr: 'Ratatouille' }, desc: { en: 'Traditional vegetable stew from Provence', fr: 'Ragoût de légumes traditionnel de Provence' }, price: 12.00, category: 'Mains', active: false, img: 'https://images.unsplash.com/photo-1572449043416-55f4685c9bb7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
@@ -19,7 +20,35 @@ export default function MenuPage() {
     { id: 6, name: { en: 'Crème Brûlée', fr: 'Crème Brûlée' }, desc: { en: 'Rich custard base topped with hardened caramelized sugar', fr: 'Base de crème riche surmontée de sucre caramélisé durci' }, price: 8.50, category: 'Desserts', active: false, img: 'https://images.unsplash.com/photo-1473663673752-1f4a9b6c0757?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
   ];
 
-  const filteredDishes = activeTab === 'All' ? dishes : dishes.filter(d => d.category === activeTab);
+  const [dishes, setDishes] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    // Read from localStorage
+    const savedDishesStr = localStorage.getItem('cook_dishes');
+    if (savedDishesStr) {
+      try {
+        setDishes(JSON.parse(savedDishesStr));
+      } catch (err) {
+        setDishes(DEFAULT_DISHES);
+      }
+    } else {
+      localStorage.setItem('cook_dishes', JSON.stringify(DEFAULT_DISHES));
+      setDishes(DEFAULT_DISHES);
+    }
+  }, []);
+
+  const handleToggleActive = (id: any) => {
+    const updated = dishes.map(d => d.id === id ? { ...d, active: !d.active } : d);
+    setDishes(updated);
+    localStorage.setItem('cook_dishes', JSON.stringify(updated));
+  };
+
+  const filteredDishes = dishes.filter(d => {
+    const matchesCategory = activeTab === 'All' ? true : d.category.toLowerCase().includes(activeTab.toLowerCase().replace('s', ''));
+    const matchesSearch = d.name[lang].toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          d.desc[lang].toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <div className={styles.container}>
@@ -30,7 +59,7 @@ export default function MenuPage() {
             {lang === 'en' ? 'Manage your dishes and availability' : 'Gérez vos plats et disponibilités'}
           </p>
         </div>
-        <Link href="/menu/new" className={styles.primaryBtn}>
+        <Link href="/cook/menu/new" className={styles.primaryBtn}>
           {lang === 'en' ? '+ Add Dish' : '+ Ajouter un plat'}
         </Link>
       </header>
@@ -42,6 +71,8 @@ export default function MenuPage() {
             type="text" 
             placeholder={lang === 'en' ? 'Search dishes...' : 'Rechercher des plats...'} 
             className={styles.searchInput}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <div className={styles.tabs}>
@@ -74,7 +105,11 @@ export default function MenuPage() {
               <div className={styles.cardFooter}>
                 <div className={styles.toggleWrapper}>
                   <label className={styles.switch}>
-                    <input type="checkbox" defaultChecked={dish.active} />
+                    <input 
+                      type="checkbox" 
+                      checked={dish.active} 
+                      onChange={() => handleToggleActive(dish.id)}
+                    />
                     <span className={styles.slider}></span>
                   </label>
                   <span className={styles.toggleLabel}>

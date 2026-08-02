@@ -4,7 +4,7 @@ import styles from './explore.module.css';
 import CookCard from '@/components/client/CookCard';
 import SearchBar from '@/components/client/SearchBar';
 
-const MOCK_COOKS = [
+const DEFAULT_COOKS = [
   { id: '1', name: 'Marie Dupont', image: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=800', specialty: 'Cuisine Française Traditionnelle', rating: 4.9, reviews: 124, distance: '1.2 km', tags: ['Français', 'Halal'] },
   { id: '2', name: 'Mamadou Diallo', image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=800', specialty: 'Spécialités Africaines', rating: 4.8, reviews: 89, distance: '2.5 km', tags: ['Africain', 'Halal'] },
   { id: '3', name: 'Chen Wei', image: 'https://images.unsplash.com/photo-1541614101331-1a5a3e19a40a?auto=format&fit=crop&q=80&w=800', specialty: 'Authentique Asiatique', rating: 4.7, reviews: 210, distance: '3.1 km', tags: ['Asiatique', 'Végétarien'] },
@@ -18,17 +18,52 @@ const MOCK_COOKS = [
 const CATEGORIES = ['Tous', 'Africain', 'Asiatique', 'Français', 'Italien', 'Libanais', 'Mexicain', 'Indien', 'Desserts'];
 
 export default function ExplorePage() {
+  const [cooks, setCooks] = useState<any[]>(DEFAULT_COOKS);
   const [activeCategory, setActiveCategory] = useState('Tous');
   const [showMap, setShowMap] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    
+    // Check if category is passed via search params
+    const params = new URLSearchParams(window.location.search);
+    const categoryParam = params.get('category');
+    if (categoryParam) {
+      setActiveCategory(categoryParam);
+    }
+    
+    // Load dynamically added cooks from localStorage
+    const savedUserSessionStr = localStorage.getItem('user_session');
+    if (savedUserSessionStr) {
+      try {
+        const savedUser = JSON.parse(savedUserSessionStr);
+        if (savedUser.role === 'cook') {
+          // Verify if already inside list
+          const exists = DEFAULT_COOKS.some(c => c.name === savedUser.name || c.id === 'custom_cook');
+          if (!exists) {
+            const customCook = {
+              id: 'custom_cook',
+              name: savedUser.name,
+              image: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=800',
+              specialty: savedUser.specialty || 'Spécialités du Chef',
+              rating: 5.0,
+              reviews: 1,
+              distance: '0.5 km',
+              tags: ['Tous', savedUser.specialty || 'Français']
+            };
+            setCooks([customCook, ...DEFAULT_COOKS]);
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
   }, []);
 
   const filteredCooks = activeCategory === 'Tous' 
-    ? MOCK_COOKS 
-    : MOCK_COOKS.filter(cook => cook.tags.includes(activeCategory));
+    ? cooks 
+    : cooks.filter(cook => cook.tags.includes(activeCategory) || cook.specialty.toLowerCase().includes(activeCategory.toLowerCase()));
 
   if (!mounted) return null;
 

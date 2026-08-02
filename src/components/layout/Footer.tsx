@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import { useLocale } from '@/context/LocaleContext';
+import { useLocale } from '@/lib/i18n';
 import styles from './Footer.module.css';
 
 export default function Footer() {

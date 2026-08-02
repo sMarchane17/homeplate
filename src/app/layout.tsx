@@ -1,19 +1,12 @@
 import type { Metadata } from 'next';
-import { Inter, Outfit } from 'next/font/google';
 import './globals.css';
-import { LocaleProvider } from '@/context/LocaleContext';
+import { LocaleProvider } from '@/lib/i18n';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 
-const inter = Inter({ 
-  subsets: ['latin'],
-  variable: '--font-inter',
-});
-
-const outfit = Outfit({ 
-  subsets: ['latin'],
-  variable: '--font-outfit',
-});
+// Offline system font stack fallbacks rather than downloading Google Fonts during build timeouts
+const inter = { variable: 'font-inter' };
+const outfit = { variable: 'font-outfit' };
 
 export const metadata: Metadata = {
   title: 'HomePlate | Premium Home-Cooked Meals',

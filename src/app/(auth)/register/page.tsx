@@ -66,31 +66,50 @@ export default function RegisterPage() {
                 {role === 'cook' ? 'Devenir Cuisinier / Become a Cook' : 'Créer un compte / Create account'}
               </h1>
 
-              <form className={styles.form}>
+              <form 
+                className={styles.form}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const name = (document.getElementById('name') as HTMLInputElement).value;
+                  const email = (document.getElementById('email') as HTMLInputElement).value;
+                  const password = (document.getElementById('password') as HTMLInputElement).value;
+                  const specialty = role === 'cook' ? (document.getElementById('specialty') as HTMLInputElement).value : '';
+
+                  if (!name || !email || !password) {
+                    alert("Veuillez remplir tous les champs / Please fill in all fields");
+                    return;
+                  }
+
+                  // Save user in localStorage
+                  localStorage.setItem('user_session', JSON.stringify({ name, email, role, specialty }));
+                  alert("Compte créé avec succès ! Connectez-vous / Account created successfully! Please log in.");
+                  window.location.href = '/login';
+                }}
+              >
                 <div className={styles.inputGroup}>
                   <label htmlFor="name">Nom complet / Full name</label>
-                  <input type="text" id="name" placeholder="Jean Dupont" className={styles.input} />
+                  <input type="text" id="name" placeholder="Jean Dupont" className={styles.input} required />
                 </div>
 
                 <div className={styles.inputGroup}>
                   <label htmlFor="email">Email</label>
-                  <input type="email" id="email" placeholder="nom@exemple.com" className={styles.input} />
+                  <input type="email" id="email" placeholder="nom@exemple.com" className={styles.input} required />
                 </div>
 
                 {role === 'cook' && (
                   <div className={styles.inputGroup}>
                     <label htmlFor="specialty">Spécialité / Specialty</label>
-                    <input type="text" id="specialty" placeholder="Cuisine Italienne" className={styles.input} />
+                    <input type="text" id="specialty" placeholder="Cuisine Italienne" className={styles.input} required />
                   </div>
                 )}
 
                 <div className={styles.inputGroup}>
                   <label htmlFor="password">Mot de passe / Password</label>
-                  <input type="password" id="password" placeholder="••••••••" className={styles.input} />
+                  <input type="password" id="password" placeholder="••••••••" className={styles.input} required />
                 </div>
 
                 <div className={styles.checkboxGroup}>
-                  <input type="checkbox" id="terms" className={styles.checkbox} />
+                  <input type="checkbox" id="terms" className={styles.checkbox} required />
                   <label htmlFor="terms">J'accepte les conditions / I agree to terms</label>
                 </div>
 

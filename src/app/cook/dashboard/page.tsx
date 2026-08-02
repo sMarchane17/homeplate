@@ -7,6 +7,18 @@ import styles from './dashboard.module.css';
 
 export default function DashboardPage() {
   const [lang, setLang] = useState<'en' | 'fr'>('en'); // Mocking context for now
+  const [user, setUser] = useState<{ name: string } | null>(null);
+
+  React.useEffect(() => {
+    const storedUser = localStorage.getItem('active_user');
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }, []);
 
   const stats = [
     { icon: '💰', label: { en: 'Revenue Today', fr: 'Revenu du jour' }, value: '€245.50', trend: '12%', trendDirection: 'up' as const },
@@ -22,17 +34,19 @@ export default function DashboardPage() {
     { id: '#ORD-004', customer: 'Lucas T.', items: '1x Quiche Lorraine', total: '€15.00', status: 'completed', time: '3 hrs ago' },
   ];
 
+  const name = user ? user.name : 'Marie';
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
         <div>
-          <h1 className={styles.title}>{lang === 'en' ? 'Welcome back, Marie! 👋' : 'Bon retour, Marie! 👋'}</h1>
+          <h1 className={styles.title}>{lang === 'en' ? `Welcome back, ${name}! 👋` : `Bon retour, ${name}! 👋`}</h1>
           <p className={styles.subtitle}>
             {lang === 'en' ? "Here's what's happening with your kitchen today." : "Voici ce qui se passe dans votre cuisine aujourd'hui."}
           </p>
         </div>
         <div className={styles.actions}>
-          <Link href="/menu/new" className={styles.primaryBtn}>
+          <Link href="/cook/menu/new" className={styles.primaryBtn}>
             {lang === 'en' ? '+ Add New Dish' : '+ Ajouter un plat'}
           </Link>
         </div>

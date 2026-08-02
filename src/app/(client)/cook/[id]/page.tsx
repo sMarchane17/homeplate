@@ -4,7 +4,7 @@ import styles from './cook-detail.module.css';
 import DishCard from '@/components/client/DishCard';
 import Link from 'next/link';
 
-const MOCK_COOK = {
+const DEFAULT_COOK = {
   id: '1',
   name: 'Marie Dupont',
   avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200',
@@ -34,17 +34,70 @@ const MOCK_COOK = {
 
 const CATEGORIES = ['Tous', 'Entrées', 'Plats', 'Desserts'];
 
-export default function CookDetailPage() {
+export default function CookDetailPage({ params }: { params: { id: string } }) {
   const [activeTab, setActiveTab] = useState('Tous');
+  const [cook, setCook] = useState<any>(DEFAULT_COOK);
+
+  React.useEffect(() => {
+    // Check if loading custom cook
+    if (window.location.href.includes('custom_cook')) {
+      const savedUserStr = localStorage.getItem('user_session');
+      if (savedUserStr) {
+        try {
+          const savedUser = JSON.parse(savedUserStr);
+          // Load custom cook dishes
+          const savedDishesStr = localStorage.getItem('cook_dishes');
+          let customDishes = [];
+          if (savedDishesStr) {
+            const parsedDishes = JSON.parse(savedDishesStr);
+            // Adapt structure
+            customDishes = parsedDishes.map((d: any) => ({
+              id: d.id.toString(),
+              category: d.category === 'Mains' ? 'Plats' : d.category === 'Starters' ? 'Entrées' : d.category,
+              name: d.name.fr,
+              description: d.desc.fr,
+              price: d.price,
+              image: d.img,
+              badges: d.dietary || [],
+              prepTime: '30 min'
+            }));
+          }
+
+          setCook({
+            id: 'custom_cook',
+            name: savedUser.name,
+            avatar: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=200',
+            cover: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=1200',
+            specialty: savedUser.specialty || 'Spécialités de la maison',
+            rating: 5.0,
+            reviewsCount: customDishes.length > 0 ? 1 : 0,
+            location: 'Localisation de votre Profil (0.5 km)',
+            memberSince: 'Aujourd\'hui',
+            prepTime: '30 min',
+            minOrder: 10,
+            description: "Bienvenue sur mon profil de cuisine fait maison ! Tous mes plats sont préparés le jour même avec des ingrédients frais. / Welcome to my homemade kitchen profile! All my dishes are prepared daily with fresh ingredients.",
+            dishes: customDishes.length > 0 ? customDishes : [
+              { id: 'c1', category: 'Plats', name: 'Plat signature du Chef', description: 'Notre spécialité préparée à la demande. / Our signature chef dish prepared on demand.', price: 15.00, image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600', badges: [], prepTime: '30 min' }
+            ],
+            reviews: [
+              { id: 'r_custom', user: 'Testeur HomePlate', rating: 5, date: 'Aujourd\'hui', text: 'Cuisine excellente et très bon contact avec le chef particulier ! A refaire.' }
+            ]
+          });
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    }
+  }, []);
   
   const filteredDishes = activeTab === 'Tous' 
-    ? MOCK_COOK.dishes 
-    : MOCK_COOK.dishes.filter(d => d.category === activeTab);
+    ? cook.dishes 
+    : cook.dishes.filter((d: any) => d.category === activeTab);
 
   return (
     <div className={styles.page}>
       <div className={styles.hero}>
-        <img src={MOCK_COOK.cover} alt="Cover" className={styles.coverImage} />
+        <img src={cook.cover} alt="Cover" className={styles.coverImage} />
         <div className={styles.heroOverlay}>
           <Link href="/explore" className={styles.backBtn}>← Retour / Back</Link>
         </div>
@@ -52,39 +105,39 @@ export default function CookDetailPage() {
 
       <div className={styles.profileSection}>
         <div className={styles.avatarContainer}>
-          <img src={MOCK_COOK.avatar} alt={MOCK_COOK.name} className={styles.avatar} />
+          <img src={cook.avatar} alt={cook.name} className={styles.avatar} />
         </div>
         
         <div className={styles.profileHeader}>
           <div>
-            <h1 className={styles.name}>{MOCK_COOK.name}</h1>
-            <p className={styles.specialty}>{MOCK_COOK.specialty}</p>
+            <h1 className={styles.name}>{cook.name}</h1>
+            <p className={styles.specialty}>{cook.specialty}</p>
           </div>
           <div className={styles.ratingBox}>
             <span className={styles.star}>★</span>
-            <span className={styles.ratingValue}>{MOCK_COOK.rating}</span>
-            <span className={styles.reviewsCount}>({MOCK_COOK.reviewsCount} avis)</span>
+            <span className={styles.ratingValue}>{cook.rating}</span>
+            <span className={styles.reviewsCount}>({cook.reviewsCount} avis)</span>
           </div>
         </div>
 
-        <p className={styles.description}>{MOCK_COOK.description}</p>
+        <p className={styles.description}>{cook.description}</p>
         
         <div className={styles.infoGrid}>
           <div className={styles.infoItem}>
             <span className={styles.infoLabel}>📍 Lieu / Location</span>
-            <span className={styles.infoValue}>{MOCK_COOK.location}</span>
+            <span className={styles.infoValue}>{cook.location}</span>
           </div>
           <div className={styles.infoItem}>
             <span className={styles.infoLabel}>⏱️ Préparation</span>
-            <span className={styles.infoValue}>{MOCK_COOK.prepTime}</span>
+            <span className={styles.infoValue}>{cook.prepTime}</span>
           </div>
           <div className={styles.infoItem}>
             <span className={styles.infoLabel}>💰 Min. commande</span>
-            <span className={styles.infoValue}>€{MOCK_COOK.minOrder}</span>
+            <span className={styles.infoValue}>€{cook.minOrder}</span>
           </div>
           <div className={styles.infoItem}>
             <span className={styles.infoLabel}>📅 Membre depuis</span>
-            <span className={styles.infoValue}>{MOCK_COOK.memberSince}</span>
+            <span className={styles.infoValue}>{cook.memberSince}</span>
           </div>
         </div>
 
@@ -112,7 +165,7 @@ export default function CookDetailPage() {
         </div>
 
         <div className={styles.dishesGrid}>
-          {filteredDishes.map((dish, index) => (
+          {filteredDishes.map((dish: any, index: number) => (
             <div key={dish.id} style={{ animationDelay: `${index * 0.1}s` }} className={styles.dishWrapper}>
               <DishCard {...dish} />
             </div>
@@ -125,9 +178,9 @@ export default function CookDetailPage() {
         
         <div className={styles.reviewsSummary}>
           <div className={styles.bigRating}>
-            <span className={styles.bigRatingValue}>{MOCK_COOK.rating}</span>
+            <span className={styles.bigRatingValue}>{cook.rating}</span>
             <div className={styles.bigStars}>★★★★★</div>
-            <span className={styles.bigRatingCount}>{MOCK_COOK.reviewsCount} avis</span>
+            <span className={styles.bigRatingCount}>{cook.reviewsCount} avis</span>
           </div>
           
           <div className={styles.ratingBars}>
@@ -146,7 +199,7 @@ export default function CookDetailPage() {
         </div>
 
         <div className={styles.reviewsList}>
-          {MOCK_COOK.reviews.map(review => (
+          {cook.reviews.map((review: any) => (
             <div key={review.id} className={styles.reviewCard}>
               <div className={styles.reviewHeader}>
                 <span className={styles.reviewUser}>{review.user}</span>

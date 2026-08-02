@@ -1,3 +1,4 @@
+'use client';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 type Translations = Record<string, Record<string, string>>;
@@ -13,6 +14,15 @@ export const translations: Translations = {
   "nav.logout": { fr: "Déconnexion", en: "Logout" },
   "nav.becomeCook": { fr: "Devenir Cuisinier", en: "Become a Cook" },
   "nav.dashboard": { fr: "Tableau de Bord", en: "Dashboard" },
+  
+  // Shared Navigation & General
+  "about": { fr: "À propos", en: "About" },
+  "howItWorks": { fr: "Comment ça marche", en: "How it works" },
+  "becomeACook": { fr: "Devenir Cuisinier", en: "Become a Cook" },
+  "faq": { fr: "FAQ", en: "FAQ" },
+  "contact": { fr: "Contact", en: "Contact" },
+  "login": { fr: "Connexion", en: "Log in" },
+  "signup": { fr: "S'inscrire", en: "Sign up" },
 
   // Landing Page
   "hero.title": { fr: "Les meilleurs plats faits maison, près de chez vous", en: "The best homemade dishes, near you" },
