@@ -1,0 +1,156 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CLIENT
+  COOK
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  PICKED_UP
+  CANCELLED
+}
+
+enum OrderType {
+  PICKUP
+  DELIVERY
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  avatar       String?
+  role         Role     @default(CLIENT)
+  phone        String?
+  address      String?
+  latitude     Float?
+  longitude    Float?
+  locale       String   @default("fr")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  cookProfile  CookProfile?
+  orders       Order[]   @relation("ClientOrders")
+  reviews      Review[]
+}
+
+model CookProfile {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  bio            String?
+  specialty      String?
+  kitchenType    String?
+  rating         Float    @default(0.0)
+  totalOrders    Int      @default(0)
+  isVerified     Boolean  @default(false)
+  isActive       Boolean  @default(true)
+  deliveryRadius Float    @default(0.0)
+  minOrderAmount Float    @default(0.0)
+  coverImage     String?
+  createdAt      DateTime @default(now())
+
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dishes         Dish[]
+  orders         Order[]        @relation("CookOrders")
+  reviews        Review[]
+  availabilities Availability[]
+}
+
+model Dish {
+  id            String   @id @default(uuid())
+  cookProfileId String
+  name          String
+  nameEn        String?
+  description   String?
+  descriptionEn String?
+  price         Float
+  image         String?
+  category      String?
+  allergens     String[]
+  prepTime      Int      @default(0)
+  isAvailable   Boolean  @default(true)
+  isVegetarian  Boolean  @default(false)
+  isVegan       Boolean  @default(false)
+  isGlutenFree  Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  cookProfile   CookProfile @relation(fields: [cookProfileId], references: [id], onDelete: Cascade)
+  orderItems    OrderItem[]
+  reviews       Review[]
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  clientId        String
+  cookProfileId   String
+  status          OrderStatus @default(PENDING)
+  totalAmount     Float
+  deliveryAddress String?
+  note            String?
+  type            OrderType   @default(PICKUP)
+  estimatedReady  DateTime?
+  createdAt       DateTime    @default(now())
+
+  client          User        @relation("ClientOrders", fields: [clientId], references: [id])
+  cookProfile     CookProfile @relation("CookOrders", fields: [cookProfileId], references: [id])
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id        String @id @default(uuid())
+  orderId   String
+  dishId    String
+  quantity  Int
+  unitPrice Float
+
+  order     Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  dish      Dish   @relation(fields: [dishId], references: [id])
+}
+
+model Review {
+  id            String   @id @default(uuid())
+  userId        String
+  dishId        String?
+  cookProfileId String
+  rating        Int
+  comment       String?
+  createdAt     DateTime @default(now())
+
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dish          Dish?       @relation(fields: [dishId], references: [id], onDelete: SetNull)
+  cookProfile   CookProfile @relation(fields: [cookProfileId], references: [id], onDelete: Cascade)
+}
+
+model Availability {
+  id            String      @id @default(uuid())
+  cookProfileId String
+  dayOfWeek     DayOfWeek
+  openTime      String
+  closeTime     String
+  isActive      Boolean     @default(true)
+
+  cookProfile   CookProfile @relation(fields: [cookProfileId], references: [id], onDelete: Cascade)
+}

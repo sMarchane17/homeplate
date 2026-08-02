@@ -1,0 +1,37 @@
+.container {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.stars {
+  display: flex;
+}
+
+.star {
+  line-height: 1;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.interactive {
+  cursor: pointer;
+}
+
+.interactive:hover {
+  transform: scale(1.2);
+}
+
+/* Sizes */
+.sm .star { font-size: 14px; }
+.md .star { font-size: 18px; }
+.lg .star { font-size: 24px; }
+
+.value {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--color-neutral-200);
+}
+
+.sm .value { font-size: var(--text-sm); }
+.md .value { font-size: var(--text-base); }
+.lg .value { font-size: var(--text-lg); }

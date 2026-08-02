@@ -1,0 +1,64 @@
+.card {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+  transition: all var(--transition-normal);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Variants */
+.default {
+  background: var(--color-neutral-900);
+  border: 1px solid var(--color-neutral-800);
+}
+
+.glass {
+  background: var(--glass-bg-dark);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+}
+
+.elevated {
+  background: var(--color-neutral-900);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-800);
+}
+
+.outline {
+  background: transparent;
+  border: 1px solid var(--color-neutral-700);
+}
+
+/* Padding Options */
+.pad-none .content { padding: 0; }
+.pad-sm .content { padding: var(--space-4); }
+.pad-md .content { padding: var(--space-6); }
+.pad-lg .content { padding: var(--space-8); }
+
+/* Modifiers */
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary-500);
+}
+
+.imageHeader {
+  width: 100%;
+  position: relative;
+}
+
+.imageHeader img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}

@@ -1,0 +1,267 @@
+.splitLayout {
+  display: flex;
+  min-height: 650px;
+}
+
+.formSide {
+  flex: 1;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.logoContainer {
+  margin-bottom: 1rem;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.logoText { color: var(--color-text-primary); }
+.logoAccent { color: var(--color-primary); }
+
+.formContent {
+  max-width: 400px;
+  width: 100%;
+  margin: auto;
+}
+
+.progressContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.progressStep {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  transition: all 0.3s;
+}
+
+.progressStep.active {
+  background: var(--color-primary);
+  color: white;
+}
+
+.progressLine {
+  height: 2px;
+  width: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 10px;
+  transition: all 0.3s;
+}
+
+.progressLine.activeLine {
+  background: var(--color-primary);
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--color-text-muted);
+  margin-bottom: 2rem;
+}
+
+.roleCards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.roleCard {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  color: var(--color-text-primary);
+}
+
+.roleCard:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.roleIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.roleCard h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+}
+
+.roleCard p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.backButton {
+  margin-bottom: 1rem;
+}
+
+.backButton button {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.backButton button:hover {
+  color: var(--color-primary);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputGroup label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  color: var(--color-text-primary);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: var(--color-primary);
+}
+
+.checkboxGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkbox {
+  accent-color: var(--color-primary);
+}
+
+.checkboxGroup label {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.submitBtn {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 0.5rem;
+}
+
+.submitBtn:hover {
+  background: var(--color-secondary);
+}
+
+.footer {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.decorativeSide {
+  flex: 1;
+  background: linear-gradient(135deg, #1A1A1A, var(--color-accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.decorativeSide::before {
+  content: '';
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+  bottom: -25%;
+  right: -25%;
+}
+
+.decorativeContent {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: white;
+  padding: 2rem;
+}
+
+.decorativeContent h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.decorativeContent p {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .decorativeSide {
+    display: none;
+  }
+  .formSide {
+    padding: 2rem 1rem;
+  }
+}

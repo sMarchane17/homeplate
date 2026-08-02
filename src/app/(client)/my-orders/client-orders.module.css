@@ -1,0 +1,255 @@
+.page {
+  padding: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0;
+  color: var(--color-text-primary, #FAFAFA);
+}
+
+.tabsContainer {
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
+.tabBtn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted, #737373);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 12px 16px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.tabBtn:hover {
+  color: var(--color-text-secondary, #E5E5E5);
+}
+
+.activeTab {
+  color: var(--color-primary, #FF6B35);
+}
+
+.activeTab::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--color-primary, #FF6B35);
+  border-radius: 3px 3px 0 0;
+}
+
+.ordersList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.orderCard {
+  background: var(--color-bg-secondary, #141414);
+  border-radius: var(--radius-xl, 16px);
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.orderMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.orderId {
+  font-weight: 700;
+  color: var(--color-text-primary, #FAFAFA);
+}
+
+.orderDate {
+  font-size: 0.875rem;
+  color: var(--color-text-muted, #737373);
+}
+
+.statusBadge {
+  padding: 6px 12px;
+  border-radius: var(--radius-full, 9999px);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.cookInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.cookAvatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.cookDetails {
+  flex: 1;
+}
+
+.cookName {
+  margin: 0 0 4px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #FAFAFA);
+}
+
+.orderItems {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #E5E5E5);
+}
+
+.orderTotal {
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--color-primary, #FF6B35);
+}
+
+.progressContainer {
+  margin-bottom: 24px;
+  background: var(--color-bg-tertiary, #1A1A1A);
+  padding: 16px;
+  border-radius: var(--radius-lg, 12px);
+}
+
+.progressBar {
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.progressLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #737373);
+}
+
+.activeLabel {
+  color: var(--color-text-primary, #FAFAFA);
+  font-weight: 600;
+}
+
+.orderActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.actionBtnPrimary, .actionBtnSecondary, .actionBtnText {
+  padding: 8px 16px;
+  border-radius: var(--radius-full, 9999px);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.actionBtnPrimary {
+  background: var(--color-primary, #FF6B35);
+  color: white;
+  border: none;
+}
+
+.actionBtnPrimary:hover {
+  background: var(--color-secondary, #F7931E);
+}
+
+.actionBtnSecondary {
+  background: transparent;
+  color: var(--color-text-primary, #FAFAFA);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.actionBtnSecondary:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.actionBtnText {
+  background: transparent;
+  color: var(--color-text-muted, #737373);
+  border: none;
+  margin-left: auto;
+}
+
+.actionBtnText:hover {
+  color: var(--color-text-primary, #FAFAFA);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 64px 20px;
+  background: var(--color-bg-secondary, #141414);
+  border-radius: var(--radius-xl, 16px);
+  border: 1px dashed rgba(255,255,255,0.1);
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.emptyState h3 {
+  margin: 0 0 8px 0;
+  color: var(--color-text-primary, #FAFAFA);
+}
+
+.emptyState p {
+  color: var(--color-text-muted, #737373);
+  margin-bottom: 24px;
+}
+
+.primaryBtn {
+  display: inline-block;
+  background: var(--color-primary, #FF6B35);
+  color: white;
+  text-decoration: none;
+  padding: 10px 24px;
+  border-radius: var(--radius-full, 9999px);
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.primaryBtn:hover {
+  background: var(--color-secondary, #F7931E);
+}

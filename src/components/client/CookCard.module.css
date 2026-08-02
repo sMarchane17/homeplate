@@ -1,0 +1,110 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-secondary, #141414);
+  border-radius: var(--radius-xl, 16px);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(255, 107, 53, 0.15);
+}
+
+.imageContainer {
+  position: relative;
+  height: 200px;
+  width: 100%;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gradientOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.9), transparent);
+}
+
+.pickupBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--color-primary, #FF6B35);
+  color: white;
+  padding: 4px 10px;
+  border-radius: var(--radius-full, 9999px);
+  font-size: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.name {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #FAFAFA);
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #E5E5E5);
+}
+
+.star {
+  color: var(--color-accent, #FFB800);
+}
+
+.specialty {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #E5E5E5);
+}
+
+.distance {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-muted, #737373);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.tag {
+  background-color: var(--color-bg-tertiary, #1A1A1A);
+  color: var(--color-text-secondary, #E5E5E5);
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
